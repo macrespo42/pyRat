@@ -3,6 +3,7 @@ import sys
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+from call_function import call_function
 from functions.get_files_infos import schema_get_files_info
 from functions.get_file_content import schema_get_file_content
 from functions.run_python_file import schema_run_python_file
@@ -49,6 +50,13 @@ def main(prompt: str, verbose=False):
     if response.function_calls:
         for call in response.function_calls:
             print(f"Calling function: {call.name}({call.args})")
+            result = call_function(call)
+            if not result.parts[0].function_response.response:
+                raise SystemError(
+                    f"Fatal error when executing {call.name} function with {call.args} arguments"
+                )
+            if verbose:
+                print(f"-> {result.parts[0].function_response.response}")
     else:
         print(response.text)
     if verbose:
