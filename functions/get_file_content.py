@@ -1,6 +1,5 @@
 import os
-
-FILE_SIZE_LIMIT = 10_000
+from config import FILE_SIZE_LIMIT
 
 
 def get_file_content(workding_directory: str, file_path: str) -> str:

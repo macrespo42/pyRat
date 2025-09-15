@@ -50,4 +50,5 @@ def test_run_python_file():
 
 
 if __name__ == "__main__":
-    test_run_python_file()
+    # test_run_python_file()
+    test_get_file_content()
