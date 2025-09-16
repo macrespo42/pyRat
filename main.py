@@ -8,19 +8,7 @@ from functions.get_files_infos import schema_get_files_infos
 from functions.get_file_content import schema_get_file_content
 from functions.run_python_file import schema_run_python_file
 from functions.write_file import schema_write_file
-
-system_prompt = """
-You are a helpful AI coding agent.
-
-When a user asks a question or makes a request, make a function call plan. You can perform the following operations:
-
-- List files and directories
-- Read file contents
-- Execute Python files with optional arguments
-- Write or overwrite files
-
-All paths you provide should be relative to the working directory. You do not need to specify the working directory in your function calls as it is automatically injected for security reasons.
-"""
+from config import SYSTEM_PROMPT, MAX_ITER
 
 
 def get_available_functions():
@@ -42,12 +30,12 @@ def main(prompt: str, verbose=False):
     messages = [types.Content(role="user", parts=[types.Part(text=prompt)])]
 
     try:
-        for _ in range(0, 20):
+        for _ in range(0, MAX_ITER):
             response = client.models.generate_content(
                 model="gemini-2.0-flash-001",
                 contents=messages,
                 config=types.GenerateContentConfig(
-                    tools=[get_available_functions()], system_instruction=system_prompt
+                    tools=[get_available_functions()], system_instruction=SYSTEM_PROMPT
                 ),
             )
             if verbose:

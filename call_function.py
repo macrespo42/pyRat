@@ -3,6 +3,7 @@ from functions.get_files_infos import get_files_infos
 from functions.get_file_content import get_file_content
 from functions.run_python_file import run_python_file
 from functions.write_file import write_file
+from config import ROOT
 
 
 def call_function(function_call_part: types.FunctionCall, verbose=False):
@@ -29,7 +30,7 @@ def call_function(function_call_part: types.FunctionCall, verbose=False):
                 )
             ],
         )
-    function_result = fx("./calculator", **args)
+    function_result = fx(ROOT, **args)
     return types.Content(
         role="tool",
         parts=[
